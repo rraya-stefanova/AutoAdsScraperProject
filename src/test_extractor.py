@@ -1,5 +1,4 @@
 import pytest
-import re
 from bs4 import BeautifulSoup
 from extractor import Extractor  # Assuming your class is saved in extractor.py
 

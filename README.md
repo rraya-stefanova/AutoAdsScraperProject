@@ -13,6 +13,11 @@ cd olx_scraper
 python3 -m venv .venv
 source .venv/bin/activate
 
+sudo apt install python3-tk
+sudo apt install python3-bs4
+sudo apt install python3-extractor
+sudo apt install python3-aiohttp
+
 # Install dependencies
 pip install -r requirements.txt
 ```
