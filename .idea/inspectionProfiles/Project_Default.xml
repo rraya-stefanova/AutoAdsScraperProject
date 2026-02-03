@@ -1,0 +1,81 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredPackages">
+        <list>
+          <option value="aiosqlite" />
+          <option value="alembic" />
+          <option value="apprise" />
+          <option value="asgi-lifespan" />
+          <option value="asyncpg" />
+          <option value="beartype" />
+          <option value="cloudpickle" />
+          <option value="colorama" />
+          <option value="coolname" />
+          <option value="dnspython" />
+          <option value="docker" />
+          <option value="email-validator" />
+          <option value="entrypoints" />
+          <option value="exceptiongroup" />
+          <option value="fakeredis" />
+          <option value="fastapi-cli" />
+          <option value="fastapi-cloud-cli" />
+          <option value="fastjsonschema" />
+          <option value="graphviz" />
+          <option value="greenlet" />
+          <option value="griffe" />
+          <option value="httptools" />
+          <option value="jinja2-humanize-extension" />
+          <option value="jsonpatch" />
+          <option value="jsonpointer" />
+          <option value="lupa" />
+          <option value="Mako" />
+          <option value="Markdown" />
+          <option value="nbclient" />
+          <option value="nbformat" />
+          <option value="oauthlib" />
+          <option value="ollama" />
+          <option value="opentelemetry-api" />
+          <option value="opentelemetry-exporter-prometheus" />
+          <option value="opentelemetry-instrumentation" />
+          <option value="opentelemetry-sdk" />
+          <option value="opentelemetry-semantic-conventions" />
+          <option value="orjson" />
+          <option value="papermill" />
+          <option value="pendulum" />
+          <option value="prefect" />
+          <option value="prometheus_client" />
+          <option value="py-key-value-aio" />
+          <option value="py-key-value-shared" />
+          <option value="pydantic-extra-types" />
+          <option value="pydantic-settings" />
+          <option value="pydocket" />
+          <option value="python-json-logger" />
+          <option value="python-multipart" />
+          <option value="python-slugify" />
+          <option value="readchar" />
+          <option value="redis" />
+          <option value="requests-oauthlib" />
+          <option value="rfc3339-validator" />
+          <option value="rich-toolkit" />
+          <option value="rignore" />
+          <option value="semver" />
+          <option value="sentry-sdk" />
+          <option value="shellingham" />
+          <option value="sortedcontainers" />
+          <option value="SQLAlchemy" />
+          <option value="tenacity" />
+          <option value="text-unidecode" />
+          <option value="toml" />
+          <option value="typer" />
+          <option value="ujson" />
+          <option value="uvicorn" />
+          <option value="uvloop" />
+          <option value="websockets" />
+          <option value="wrapt" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>
