@@ -46,10 +46,11 @@ The GUI has three tabs:
 
 ```
 src/
-├── main.py          # Entry point -- launches the app
-├── tracker.py       # ClassTracker -- async fetching, HTML extraction, data export
-├── app.py           # App -- tkinter GUI
-└── test_tracker.py  # Pytest suite for ClassTracker
+├── main.py            # Entry point -- launches the app
+├── tracker.py         # ClassTracker -- async fetching, HTML extraction, data export
+├── app.py             # App -- tkinter GUI
+├── test_tracker.py    # Pytest suite for ClassTracker
+└── test_extractor.py  # Pytest suite for Extractor
 ```
 
 ### `main.py`
@@ -85,11 +86,15 @@ Pytest test suite for `ClassTracker`. Covers:
 - `save_to_csv()` -- CSV export with correct headers and `None` handling
 - `save_fetched_html()` -- saving raw HTML to disk
 
+### `test_extractor.py`
+
+Pytest test suite for the OLX extractor (URL parsing, title/price cleaning, CSV export).
+
 ## Testing
 
 ```bash
 cd src
-pytest test_tracker.py -v
+pytest -v
 ```
 
 Requires `pytest` (`pip install pytest`).
