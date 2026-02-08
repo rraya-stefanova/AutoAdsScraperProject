@@ -1,0 +1,6 @@
+bs4
+requests
+pytest
+aiohttp
+beautifulsoup4
+lxml
