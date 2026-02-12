@@ -1,8 +1,15 @@
 import asyncio
 import csv
+import sys
+from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 import pytest
+
+repo_root = Path(__file__).resolve().parents[1]
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
+
 import file as file_module
 from tracker import ClassTracker
 
@@ -11,8 +18,6 @@ from tracker import ClassTracker
 def tracker() -> ClassTracker:
     return ClassTracker()
 
-
-# --- add() ---
 
 def test_add_new_url(tracker: ClassTracker) -> None:
     result = tracker.add("https://example.com", ".title")
@@ -34,8 +39,6 @@ def test_add_second_selector(tracker: ClassTracker) -> None:
     assert len(tracker.tracked["https://example.com"]) == 2
 
 
-# --- remove_url() ---
-
 def test_remove_url_exists(tracker: ClassTracker) -> None:
     tracker.add("https://example.com", ".title")
     assert tracker.remove_url("https://example.com") is True
@@ -45,8 +48,6 @@ def test_remove_url_exists(tracker: ClassTracker) -> None:
 def test_remove_url_missing(tracker: ClassTracker) -> None:
     assert tracker.remove_url("https://nonexistent.com") is False
 
-
-# --- remove_selector() ---
 
 def test_remove_selector_exists(tracker: ClassTracker) -> None:
     tracker.add("https://example.com", ".title")
@@ -69,8 +70,6 @@ def test_remove_selector_missing(tracker: ClassTracker) -> None:
 def test_remove_selector_missing_url(tracker: ClassTracker) -> None:
     assert tracker.remove_selector("https://nope.com", ".title") is False
 
-
-# --- extract_from_html() ---
 
 SAMPLE_HTML = """
 <html><body>
@@ -106,8 +105,6 @@ def test_extract_strips_whitespace(tracker: ClassTracker) -> None:
     assert result[".x"] == ["spaced  out"]
 
 
-# --- extract_all_async() ---
-
 def test_extract_all_async_empty(tracker: ClassTracker) -> None:
     result = asyncio.run(tracker.extract_all_async())
     assert result == {}
@@ -130,8 +127,6 @@ def test_extract_all_async_populates_results(tracker: ClassTracker, monkeypatch:
     assert tracker.last_errors["https://error.com"] == "HTTPError: 500"
 
 
-# --- save_to_json() / load_from_json() ---
-
 def test_json_round_trip(tracker: ClassTracker, tmp_path) -> None:
     data: Dict[str, Dict[str, Optional[Dict[str, List[str]]]]] = {
         "2026-01-01T00:00:00": {"https://example.com": {".title": ["Hello"]}}
@@ -141,8 +136,6 @@ def test_json_round_trip(tracker: ClassTracker, tmp_path) -> None:
     loaded = tracker.load_from_json(path)
     assert loaded == data
 
-
-# --- save_to_csv() ---
 
 def test_save_to_csv(tracker: ClassTracker, tmp_path) -> None:
     data: Dict[str, Dict[str, Optional[Dict[str, List[str]]]]] = {
@@ -180,10 +173,8 @@ def test_save_to_csv_skips_none(tracker: ClassTracker, tmp_path) -> None:
     with open(path, encoding="utf-8") as f:
         reader = list(csv.reader(f))
 
-    assert len(reader) == 1  # header only
+    assert len(reader) == 1
 
-
-# --- save_fetched_html() ---
 
 def test_save_fetched_html(tracker: ClassTracker, tmp_path, monkeypatch: pytest.MonkeyPatch) -> None:
     monkeypatch.chdir(tmp_path)

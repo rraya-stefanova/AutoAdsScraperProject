@@ -2,12 +2,14 @@
 
 A GUI application for tracking and extracting web elements from any website using CSS selectors, with async fetching, periodic extraction, and JSON/CSV export.
 
+Repository: https://github.com/rraya-stefanova/AutoAdsScraperProject
+
 ## Installation
 
 ```bash
 # Clone the repository
-git clone <repo-url>
-cd olx_scraper
+git clone https://github.com/rraya-stefanova/AutoAdsScraperProject.git
+cd AutoAdsScraperProject
 
 # Create and activate a virtual environment
 python3 -m venv .venv

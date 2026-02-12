@@ -98,7 +98,6 @@ class App(tk.Tk):
         notebook.add(tab_data, text="Данни")
         notebook.add(tab_log, text="Лог")
 
-        # === Таб "Проследявани" ===
         add_frame = ttk.LabelFrame(tab_tracked, text="Добавяне на URL и селектор")
         add_frame.pack(fill="x", padx=8, pady=8)
         add_frame.grid_columnconfigure(1, weight=1)
@@ -137,7 +136,6 @@ class App(tk.Tk):
 
         ttk.Button(add_frame, text="Добави", command=self.add_tracked, style="Accent.TButton").grid(row=4, column=1, pady=6, sticky="e")
 
-        # Treeview
         tree_frame = tk.Frame(tab_tracked, highlightbackground="#cbd5e1", highlightthickness=1)
         tree_frame.pack(fill="both", expand=True, padx=8, pady=4)
 
@@ -156,13 +154,11 @@ class App(tk.Tk):
         self.tree.configure(yscrollcommand=scrollbar.set)
         scrollbar.pack(side="right", fill="y")
 
-        # Бутони за управление
         control_frame = ttk.Frame(tab_tracked)
         control_frame.pack(fill="x", padx=8, pady=8)
 
         ttk.Button(control_frame, text="Премахни избран елемент", command=self.remove_selected, style="Accent.Secondary.TButton").pack(side="left", padx=5)
 
-        # Периодично извличане
         periodic_frame = ttk.LabelFrame(tab_tracked, text="Периодично извличане")
         periodic_frame.pack(fill="x", padx=8, pady=8)
 
@@ -179,7 +175,6 @@ class App(tk.Tk):
 
         ttk.Button(periodic_frame, text="Извлечи веднъж", command=self.manual_extract, style="Accent.TButton").pack(side="left", padx=20)
 
-        # === Таб "Данни" ===
         output_font = tkfont.nametofont("TkFixedFont").copy()
         output_font.configure(size=output_font.cget("size") + 1)
         self.data_text = scrolledtext.ScrolledText(tab_data, wrap="word", font=output_font)
@@ -192,7 +187,6 @@ class App(tk.Tk):
         ttk.Button(save_frame, text="Запиши в CSV", command=self.save_csv, style="Accent.TButton").pack(side="left", padx=10)
         ttk.Button(save_frame, text="Зареди от JSON", command=self.load_json, style="Accent.Secondary.TButton").pack(side="left", padx=10)
 
-        # === Таб "Лог" ===
         self.log_text = scrolledtext.ScrolledText(tab_log, font=output_font)
         self.log_text.pack(fill="both", expand=True, padx=8, pady=8)
 

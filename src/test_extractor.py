@@ -1,8 +1,15 @@
 from typing import List, Dict
+import sys
+from pathlib import Path
 
 import pytest
 from bs4 import BeautifulSoup
-from extractor import Extractor  # Assuming your class is saved in extractor.py
+
+repo_root = Path(__file__).resolve().parents[1]
+if str(repo_root) not in sys.path:
+    sys.path.insert(0, str(repo_root))
+
+from extractor import Extractor
 
 
 @pytest.fixture
@@ -11,7 +18,6 @@ def extractor() -> Extractor:
     return Extractor("https://www.olx.bg/dummy/")
 
 
-# Sample HTML snippets that match the current selectors in your code
 SAMPLE_AD_WITH_PRICE = '''
 <div class="css-1sw7q4x">
     <p data-testid="ad-price">15 900 лв.</p>
@@ -86,7 +92,6 @@ def test_get_ad_url_standard(extractor: Extractor) -> None:
 
 
 def test_get_ad_url_fallback(extractor: Extractor) -> None:
-    # Simulate a case where primary regex misses but fallback works
     html = '''
     <div class="css-1sw7q4x">
         <a href="/d/oferta/some-old-pattern-IDfallback.html"></a>
@@ -104,7 +109,6 @@ def test_get_ad_url_missing(extractor: Extractor) -> None:
 
 
 def test_extract_skips_no_price(extractor: Extractor) -> None:
-    # Full page with two ads: one with price, one without
     full_html = f'''
     <html><body>
         {SAMPLE_AD_WITH_PRICE}
@@ -114,7 +118,7 @@ def test_extract_skips_no_price(extractor: Extractor) -> None:
 
     extractor.extract_information_from_page(full_html)
 
-    assert len(extractor.data) == 1  # Only the one with price is saved
+    assert len(extractor.data) == 1
     saved = extractor.data[0]
     assert saved["Price"] == "15 900 лв."
     assert "Volkswagen Golf" in saved["Product/Title"]
@@ -138,7 +142,6 @@ def test_extract_cleans_title_and_saves_all_fields(extractor: Extractor) -> None
 
 
 def test_save_to_csv_creates_file(extractor: Extractor, tmp_path) -> None:
-    # tmp_path is a pytest fixture for temporary directory
     extractor.data = [{
         "Price": "10 000 лв.",
         "Product/Title": "Test Car",

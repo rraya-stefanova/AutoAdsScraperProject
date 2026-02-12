@@ -1,6 +1,11 @@
-__pycache__/
-*.pyc
-*.html
-venv/
-.venv/
-*.csv
+# Allowlist tracking: keep repo focused on source + essentials.
+*
+!README.md
+!requirements.txt
+!src/
+!src/**
+!.gitignore
+
+# Do not track generated artifacts inside src.
+src/**/__pycache__/
+src/**/*.pyc
