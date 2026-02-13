@@ -44,6 +44,8 @@ class App(tk.Tk):
         self.check_queue()
 
     def create_widgets(self) -> None:
+        # builds the GUI:   headers, fonts and notebooks
+        #                   the "add" form and controllers with buttons
         style = ttk.Style(self)
         try:
             style.theme_use("clam")

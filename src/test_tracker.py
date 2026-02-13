@@ -7,10 +7,10 @@ from typing import Dict, List, Optional, Tuple
 import pytest
 
 repo_root = Path(__file__).resolve().parents[1]
-if str(repo_root) not in sys.path:
-    sys.path.insert(0, str(repo_root))
+src_root = repo_root / "src"
+if str(src_root) not in sys.path:
+    sys.path.insert(0, str(src_root))
 
-import file as file_module
 from tracker import ClassTracker
 
 
@@ -192,8 +192,8 @@ def test_save_fetched_html_sanitizes_filename(tracker: ClassTracker, tmp_path, m
     assert "example.com_a_b" in saved[0].name
 
 
-def test_file_module_tracker_basic() -> None:
-    tracker = file_module.ClassTracker()
+def test_tracker_basic_api() -> None:
+    tracker = ClassTracker()
     assert tracker.add("https://example.com", ".title") == 1
     assert tracker.add("https://example.com", ".title") == 0
     assert tracker.remove_selector("https://example.com", ".title") is True

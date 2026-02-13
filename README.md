@@ -51,6 +51,7 @@ src/
 ├── main.py            # Entry point -- launches the app
 ├── tracker.py         # ClassTracker -- async fetching, HTML extraction, data export
 ├── app.py             # App -- tkinter GUI
+├── extractor.py       # Extractor -- OLX listing extraction and CSV export
 ├── test_tracker.py    # Pytest suite for ClassTracker
 └── test_extractor.py  # Pytest suite for Extractor
 ```
@@ -75,6 +76,14 @@ GUI application (`App` class):
 - Add/remove tracked URLs and selectors
 - Manual and periodic extraction with configurable interval
 - View, export, and import collected data
+
+### `extractor.py`
+
+OLX extraction logic (`Extractor` class):
+
+- Parse ad cards from listing pages
+- Extract product title, price, and ad URL
+- Normalize links and export collected records to CSV
 
 ### `test_tracker.py`
 

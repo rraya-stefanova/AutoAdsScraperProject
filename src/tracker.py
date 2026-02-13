@@ -40,6 +40,8 @@ class ClassTracker:
             result[selector] = [el.get_text(separator=" ", strip=True) for el in elements]
         return result
 
+    # asynchronously downloads url and check for an http error
+    # returns [html_string, None] or [None, Exception message]
     async def fetch(self, session: aiohttp.ClientSession, url: str, timeout: int = 10) -> Tuple[Optional[str], Optional[str]]:
         try:
             async with session.get(url, timeout=timeout) as response:
@@ -54,10 +56,12 @@ class ClassTracker:
             return all_data
 
         self.last_errors = {}
-        timestamp = datetime.datetime.now().isoformat()
 
         async with aiohttp.ClientSession() as session:
+            # fetches all URLs concurrently, so total time is close to the slowest request, not the sum of all request times.
             fetch_coroutines = [self.fetch(session, url, timeout) for url in self.tracked]
+
+            # waits for all of them to finish, then returns their results in order.
             html_pages = await asyncio.gather(*fetch_coroutines)
 
             for url, (html, error) in zip(self.tracked.keys(), html_pages):
