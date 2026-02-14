@@ -29,6 +29,53 @@ class Extractor:
             return "N/A"
         return self._clean_text(title.get_text(separator=" ", strip=True))
 
+    def get_model(self, ad_soup: BeautifulSoup) -> str:
+        model_label = ad_soup.find(string=re.compile(r"\bМодел\b", re.IGNORECASE))
+        if model_label:
+            text = self._clean_text(str(model_label))
+            match = re.search(r"Модел\s*:\s*([^;|,]+)", text, flags=re.IGNORECASE)
+            if match:
+                return self._clean_text(match.group(1))
+
+        title = self.get_product(ad_soup)
+        if title == "N/A":
+            return "N/A"
+
+        tokens = title.split()
+        if len(tokens) >= 2:
+            return f"{tokens[0]} {tokens[1]}"
+        return tokens[0]
+
+    def get_views(self, ad_soup: BeautifulSoup) -> str:
+        # Try common DOM locations first (including the user-provided class).
+        selectors = [
+            ".css-13x8d99",
+            '[data-cy="ad-view-counter"]',
+            '[data-testid="ad-view-counter"]',
+        ]
+        for selector in selectors:
+            el = ad_soup.select_one(selector)
+            if not el:
+                continue
+            candidate = self._clean_text(el.get_text(separator=" ", strip=True))
+            match = re.search(r"(\d[\d\s]*)", candidate)
+            if match:
+                return re.sub(r"\s+", "", match.group(1))
+
+        # OLX may render label/value in separate nodes, e.g. "Преглеждания:" then "349".
+        text = self._clean_text(ad_soup.get_text(separator=" ", strip=True))
+        label_match = re.search(r"Преглеждания\s*:\s*([\d\s]+)", text, flags=re.IGNORECASE)
+        if label_match:
+            return re.sub(r"\s+", "", label_match.group(1))
+
+        # Fallback for script-embedded data on pages where this value is not in visible DOM.
+        script_text = " ".join(script.get_text(" ", strip=True) for script in ad_soup.find_all("script"))
+        script_match = re.search(r'"(?:views|viewCount|viewsCount|viewsCounter)"\s*:\s*(\d+)', script_text, flags=re.IGNORECASE)
+        if script_match:
+            return script_match.group(1)
+
+        return "N/A"
+
     def _normalize_href(self, href: str) -> str:
         if href.startswith("/") and self.base_domain:
             return f"{self.base_domain}{href}"
@@ -65,10 +112,14 @@ class Extractor:
             if price == "N/A":
                 continue
             title = self.get_product(ad)
+            model = self.get_model(ad)
+            views = self.get_views(ad)
             ad_url = self.get_ad_url(ad)
             record = {
                 "Price": price,
                 "Product/Title": title,
+                "Model": model,
+                "Views": views,
                 "Ad_URL": ad_url,
                 "Source_URL": self.base_url,
                 "Extracted_At": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
@@ -79,10 +130,10 @@ class Extractor:
         if not self.data:
             with open(filename, "w", newline="", encoding="utf-8") as f:
                 writer = csv.writer(f)
-                writer.writerow(["Price", "Product/Title", "Ad_URL", "Source_URL", "Extracted_At"])
+                writer.writerow(["Price", "Product/Title", "Model", "Views", "Ad_URL", "Source_URL", "Extracted_At"])
             return
 
-        fieldnames = ["Price", "Product/Title", "Ad_URL", "Source_URL", "Extracted_At"]
+        fieldnames = ["Price", "Product/Title", "Model", "Views", "Ad_URL", "Source_URL", "Extracted_At"]
         with open(filename, "w", newline="", encoding="utf-8") as f:
             writer = csv.DictWriter(f, fieldnames=fieldnames)
             writer.writeheader()
